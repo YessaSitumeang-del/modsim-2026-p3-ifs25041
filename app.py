@@ -8,8 +8,8 @@ import pandas as pd
 # PAGE CONFIGURATION
 # ======================
 st.set_page_config(
-    page_title="Simulasi Prasmanan di Kantin ITDel",
-    page_icon="🍚",
+    page_title="Simulasi Piket di Kantin IT Del",
+    page_icon="🍚🍚",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -395,10 +395,10 @@ def plot_gantt_chart(df_timeline, sample_size=50):
 # MAIN APP
 # ======================
 def main():
-    st.markdown('<div class="main-header">🍚 Simulasi Prasmanan di Kantin ITDel</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">^⁠_⁠^🍚 Simulasi Sistem Piket di Kantin IT Del 🍚^⁠_⁠^</div>', unsafe_allow_html=True)
     st.markdown("""
     <p style="text-align: center; color: #f0f0f0; font-size: 1.1rem;">
-    Simulasi Discrete Event System (DES) untuk analisis kinerja pelayanan prasmanan dengan variasi jumlah petugas piket dan mahasiswa.
+    Simulasi Discrete Event System (DES) untuk analisis kinerja sistem piket dengan variasi jumlah petugas piket dan mahasiswa.
     </p>
     """, unsafe_allow_html=True)
     
@@ -846,8 +846,9 @@ def main():
         st.markdown("""
         <div style='text-align: center; color: #666;'>
         <small>
-        🍚 Simulasi Prasmanan di Kantin IT Del - Dibuat dengan Streamlit & Plotly - 
-        Estimasi berdasarkan model simulasi diskrit - Yessa Situmeang 11S25041
+        🍚 Simulasi Sistem Piket di Kantin IT Del - Dibuat dengan Streamlit & Plotly - 
+        Yessa Situmeang 11S25041
+                    SEMANGAT PIKET TEMAN DEL🚀♡´･ᴗ･`♡
         </small>
         </div>
         """, unsafe_allow_html=True)
