@@ -15,79 +15,101 @@ st.set_page_config(
 )
 
 # ======================
-# STYLING
+# STYLING - LATAR HITAM ⬛
 # ======================
 st.markdown("""
     <style>
+    /* Background Utama - HITAM */
+    .stApp {
+        background-color: #000000 !important;
+    }
+    [data-testid="stMainBlockContainer"] {
+        background-color: #000000 !important;
+    }
+    
+    /* Sidebar - Hitam Gelap */
+    [data-testid="stSidebar"] {
+        background-color: #0a0a0a !important;
+    }
+    
+    /* Teks - Terang agar terbaca di background hitam */
     .main-header {
         font-size: 2.5rem;
         font-weight: bold;
-        color: #1E88E5;
+        color: #ffffff;
         text-align: center;
         margin-bottom: 1rem;
     }
     .sub-header {
         font-size: 1.5rem;
         font-weight: bold;
-        color: #43A047;
+        color: #ffffff;
         margin-top: 2rem;
-    }
-    .sidebar-section {
-        background-color: #2d2d2d;
-        border-radius: 0.5rem;
-        padding: 1rem;
-        margin-bottom: 1rem;
     }
     .sidebar-title {
         font-weight: bold;
-        color: #f0f0f0;
+        color: #ffffff;
         margin-bottom: 0.5rem;
     }
+    .parameter-label {
+        color: #cccccc;
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+    }
+    .parameter-value {
+        color: #aaaaaa;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Instruction Box - Tetap biru gelap tapi lebih kontras */
     .instruction-box {
         background-color: #1a2b4d;
         border-radius: 0.5rem;
         padding: 1.5rem;
         margin-bottom: 1.5rem;
+        border: 1px solid #3949ab;
     }
     .step {
         margin-bottom: 0.5rem;
         padding-left: 1.5rem;
+        color: #e0e0e0;
     }
     .step-number {
         font-weight: bold;
         color: #4fc3f7;
         margin-right: 0.5rem;
     }
-    .parameter-label {
-        color: #f0f0f0;
-        font-weight: 500;
-        margin-bottom: 0.25rem;
-    }
-    .parameter-value {
-        color: #e0e0e0;
-        font-size: 0.9rem;
-        margin-bottom: 0.5rem;
-    }
+    
+    /* Alert Boxes */
     .bottleneck-warning {
-        background-color: #5d2626;
-        border-left: 5px solid #d32f2f;
+        background-color: #3a1a1a;
+        border-left: 5px solid #ef5350;
         padding: 1rem;
         border-radius: 0 0.5rem 0.5rem 0;
         margin: 1rem 0;
+        color: #ffcdd2;
     }
     .bottleneck-suggestion {
-        background-color: #2d3748;
-        border-left: 5px solid #4299e1;
+        background-color: #1a2a3a;
+        border-left: 5px solid #42a5f5;
         padding: 1rem;
         border-radius: 0 0.5rem 0.5rem 0;
         margin: 1rem 0;
+        color: #bbdefb;
     }
     .info-box {
-        background-color: #2c5282;
-        border-left: 5px solid #3182ce;
+        background-color: #1a2a3a;
+        border-left: 5px solid #42a5f5;
         padding: 1rem;
         border-radius: 0 0.5rem 0.5rem 0;
         margin: 1rem 0;
+        color: #bbdefb;
+    }
+    
+    /* Streamlit Components */
+    .stMarkdown, .stMetric, .stDataFrame {
+        color: #ffffff !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -251,7 +273,7 @@ def plot_utilization_chart(df_util):
         yaxis_title='Utilisasi (%)',
         yaxis=dict(range=[0, 100]),
         height=400,
-        template='plotly_white'
+        template='plotly_dark'  # ⬛ DIUBAH: white → dark
     )
     
     return fig
@@ -282,7 +304,7 @@ def plot_meja_timeline(df_meja):
         xaxis_title='Nomor Meja',
         yaxis_title='Waktu (menit)',
         height=400,
-        template='plotly_white',
+        template='plotly_dark',  # ⬛ DIUBAH: white → dark
         hovermode='x unified'
     )
     
@@ -293,16 +315,19 @@ def plot_batch_distribution(batch_sizes):
     fig = go.Figure()
     
     counts = {}
-    for size in range(4, 8):
+    for size in range(4, 9):
         counts[size] = batch_sizes.count(size)
     
-    fig.add_trace(go.Bar(
-        x=list(counts.keys()),
-        y=list(counts.values()),
-        marker_color='#9C27B0',
-        text=list(counts.values()),
-        textposition='auto',
-    ))
+    counts = {k: v for k, v in counts.items() if v > 0}
+    
+    if counts:
+        fig.add_trace(go.Bar(
+            x=list(counts.keys()),
+            y=list(counts.values()),
+            marker_color='#9C27B0',
+            text=list(counts.values()),
+            textposition='auto',
+        ))
     
     avg_batch = sum(batch_sizes) / len(batch_sizes)
     fig.add_vline(
@@ -318,7 +343,7 @@ def plot_batch_distribution(batch_sizes):
         xaxis_title='Ukuran Batch (Ompreng)',
         yaxis_title='Frekuensi',
         height=400,
-        template='plotly_white'
+        template='plotly_dark'  # ⬛ DIUBAH: white → dark
     )
     
     return fig
@@ -384,7 +409,7 @@ def plot_gantt_chart(df_timeline, sample_size=50):
         yaxis_title='Ompreng ID',
         barmode='stack',
         height=600,
-        template='plotly_white',
+        template='plotly_dark',  # ⬛ DIUBAH: white → dark
         showlegend=True,
         legend_title='Tahap Proses'
     )
@@ -429,33 +454,33 @@ def main():
         
         st.markdown('</div>', unsafe_allow_html=True)
         
-        # Parameter Waktu Layanan
+        # Parameter Waktu Layanan - DIUBAH untuk target 30 menit
         st.markdown('<div class="sidebar-section">', unsafe_allow_html=True)
         st.markdown('<div class="sidebar-title">⏱️ Parameter Waktu Layanan</div>', unsafe_allow_html=True)
         
         st.markdown('<div class="parameter-label">Waktu Minimum (detik)</div>', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1:
-            stage1_min = st.slider("Tahap 1", min_value=20, max_value=90, value=30, step=5)
+            stage1_min = st.slider("Tahap 1", min_value=10, max_value=60, value=15, step=5)
         with col2:
-            stage2_min = st.slider("Tahap 2", min_value=15, max_value=90, value=20, step=5)
+            stage2_min = st.slider("Tahap 2", min_value=5, max_value=60, value=10, step=5)
         col3, col4 = st.columns(2)
         with col3:
-            stage3_min = st.slider("Tahap 3", min_value=20, max_value=90, value=30, step=5)
+            stage3_min = st.slider("Tahap 3", min_value=10, max_value=60, value=15, step=5)
         with col4:
-            batch_min = st.slider("Batch Min", min_value=3, max_value=10, value=4, step=1)
+            batch_min = st.slider("Batch Min", min_value=3, max_value=10, value=5, step=1)
         
         st.markdown('<div class="parameter-label">Waktu Maksimum (detik)</div>', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1:
-            stage1_max = st.slider("Tahap 1 Max", min_value=30, max_value=120, value=60, step=5)
+            stage1_max = st.slider("Tahap 1 Max", min_value=20, max_value=90, value=30, step=5)
         with col2:
-            stage2_max = st.slider("Tahap 2 Max", min_value=20, max_value=120, value=60, step=5)
+            stage2_max = st.slider("Tahap 2 Max", min_value=15, max_value=90, value=25, step=5)
         col3, col4 = st.columns(2)
         with col3:
-            stage3_max = st.slider("Tahap 3 Max", min_value=30, max_value=120, value=60, step=5)
+            stage3_max = st.slider("Tahap 3 Max", min_value=20, max_value=90, value=30, step=5)
         with col4:
-            batch_max = st.slider("Batch Max", min_value=4, max_value=10, value=7, step=1)
+            batch_max = st.slider("Batch Max", min_value=4, max_value=10, value=8, step=1)
         
         st.markdown('</div>', unsafe_allow_html=True)
         
@@ -466,7 +491,7 @@ def main():
         st.markdown('</div>', unsafe_allow_html=True)
     
     # ======================
-    # INSTRUCTION BOX
+    # INSTRUCTION BOX - DIUPDATE
     # ======================
     st.markdown('<div class="instruction-box">', unsafe_allow_html=True)
     st.markdown('<div style="color: #4fc3f7; font-weight: bold; margin-bottom: 0.5rem;">📋 Penjelasan Alokasi Petugas Piket</div>', unsafe_allow_html=True)
@@ -479,24 +504,27 @@ def main():
     <div style="color: #f0f0f0; margin-left: 1.5rem; margin-bottom: 0.5rem;">
     <strong>• 3 Petugas Piket di Tahap 1 (Memasukkan Lauk)</strong><br>
     <span style="color: #e0e0e0; font-size: 0.9rem;">
-    Bertugas memasukkan lauk ke dalam ompreng. Setiap petugas mengerjakan 1 ompreng dalam waktu 30-60 detik.
-    </span>
+    Bertugas memasukkan lauk ke dalam ompreng. Setiap petugas mengerjakan 1 ompreng <strong>
     </div>
     
     <div style="color: #f0f0f0; margin-left: 1.5rem; margin-bottom: 0.5rem;">
     <strong>• 2 Petugas Piket di Tahap 2 (Mengangkat Ompreng)</strong><br>
     <span style="color: #e0e0e0; font-size: 0.9rem;">
     Bertugas mengangkat ompreng ke atas meja dengan sistem batch processing. 
-    Setiap petugas membawa 4-7 ompreng sekaligus dalam waktu 20-60 detik.
+    Setiap petugas membawa <strong>5-8 ompreng</strong> sekaligus <strong>
     </span>
     </div>
     
     <div style="color: #f0f0f0; margin-left: 1.5rem; margin-bottom: 0.5rem;">
     <strong>• 2 Petugas Piket di Tahap 3 (Menambahkan Nasi)</strong><br>
     <span style="color: #e0e0e0; font-size: 0.9rem;">
-    Bertugas menambahkan nasi ke dalam ompreng yang sudah berada di atas meja. 
-    Setiap petugas mengerjakan 1 ompreng dalam waktu 30-60 detik.
+    Bertugas menambahkan nasi ke dalam ompreng yang sudah berada di atas meja. <strong>
     </span>
+    </div>
+    
+    <div style="margin-top: 1rem; color: #4fc3f7; font-weight: bold;">🎯 Target Waktu: 30 Menit</div>
+    <div style="color: #e0e0e0; margin-bottom: 0.5rem;">
+    Dengan parameter default di atas, simulasi dirancang untuk menyelesaikan distribusi makanan ke 60 meja (180 porsi) dalam waktu <strong>±30 menit</strong>, dimulai pukul 07:00 WIB.
     </div>
     
     <div style="margin-top: 1rem; color: #4fc3f7; font-weight: bold;">🚀 Cara Menggunakan Simulasi</div>
@@ -505,12 +533,12 @@ def main():
     <div class="step"><span class="step-number">3.</span> Tunggu proses simulasi selesai</div>
     <div class="step"><span class="step-number">4.</span> Lihat hasil dan visualisasi</div>
     
-    <div style="margin-top: 1rem; color: #e0e0e0;">Parameter default:</div>
+    <div style="margin-top: 1rem; color: #e0e0e0;">Parameter default (target 30 menit):</div>
     <div style="color: #f0f0f0; margin-left: 1rem;">• Jumlah Meja: 60</div>
     <div style="color: #f0f0f0; margin-left: 1rem;">• Mahasiswa per Meja: 3</div>
     <div style="color: #f0f0f0; margin-left: 1rem;">• Alokasi Petugas: 3, 2, 2</div>
     <div style="color: #f0f0f0; margin-left: 1rem;">• Total Porsi: 180</div>
-    <div style="color: #f0f0f0; margin-left: 1rem;">• Jam Mulai: 07:00 WIB</div>
+    <div style="color: #f0f0f0; margin-left: 1rem;">• Jam Mulai: 07:00 WIB → Selesai: ~07:30 WIB</div>
     
     """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
@@ -567,7 +595,8 @@ def main():
             st.metric(
                 label="⏱️ Waktu Total",
                 value=f"{menit}m {detik}s",
-                delta=f"{total_time:.1f} detik"
+                delta=f"{total_time:.1f} detik",
+                delta_color="inverse" if total_time > 1800 else "normal"
             )
         
         with col2:
@@ -696,7 +725,6 @@ def main():
                 for _, row in results['df_utilization'].iterrows():
                     color = "🟢" if row['Utilisasi'] < 70 else "🟡" if row['Utilisasi'] < 90 else "🔴"
                     st.markdown(f"**{color} {row['Tahap']}**")
-                    # PERBAIKAN: Konversi ke skala 0-1
                     st.progress(min(1.0, row['Utilisasi'] / 100))
                     st.caption(f"{row['Utilisasi']:.1f}%")
                     st.markdown("---")
@@ -731,7 +759,7 @@ def main():
                     - **Opsi 2**: 2-2-3 (Redistribusi dari Tahap 1 ke Tahap 3)
                     
                     #### 📋 Strategi Operasional:
-                    1. **Standardisasi Batch**: Targetkan 6 ompreng/batch di Tahap 2
+                    1. **Standardisasi Batch**: Targetkan 6-7 ompreng/batch di Tahap 2
                     2. **Zonasi Meja**: Bagi 60 meja menjadi 3 zona (20 meja/zona)
                     3. **Prioritas**: Fokus selesaikan batch besar terlebih dahulu
                     """)
@@ -754,7 +782,7 @@ def main():
                     
                     #### 📋 Strategi Operasional:
                     1. **Optimasi Rute**: Rencanakan jalur terpendek untuk mengangkat
-                    2. **Batch Size**: Gunakan batch 6-7 ompreng untuk efisiensi
+                    2. **Batch Size**: Gunakan batch 6-8 ompreng untuk efisiensi
                     3. **Staging Area**: Siapkan area transit dekat meja
                     """)
             else:
@@ -763,7 +791,7 @@ def main():
                 #### 📊 Kinerja Saat Ini:
                 - Utilisasi seimbang di semua tahap
                 - Tidak ada bottleneck signifikan
-                - Waktu penyelesaian dalam target
+                - Waktu penyelesaian dalam target 30 menit
                 
                 #### 💡 Tips Pemeliharaan:
                 1. **Monitor Rutin**: Lakukan simulasi berkala untuk deteksi dini bottleneck
@@ -807,7 +835,7 @@ def main():
                     st.metric("Pengurangan Waktu", f"~{int(menit * 0.15)} menit", f"-15%")
                     st.metric("Utilisasi Maks", f"~{min(90, bottleneck_util - 15):.0f}%", f"-15%")
                 else:
-                    st.metric("Status", "Optimal", "✓")
+                    st.metric("Status", "Optimal ✓", "✓")
         
         with tab5:
             st.markdown("### 💾 Data Lengkap Simulasi")
@@ -847,8 +875,9 @@ def main():
         <div style='text-align: center; color: #666;'>
         <small>
         🍚 Simulasi Sistem Piket di Kantin IT Del - Dibuat dengan Streamlit & Plotly - 
-        Yessa Situmeang 11S25041
-                    SEMANGAT PIKET TEMAN DEL🚀♡´･ᴗ･`♡
+        Yessa Situmeang 11S25041<br>
+        SEMANGAT PIKET TEMAN DEL 🚀♡´･ᴗ･`♡<br>
+        <span style='color: #4CAF50; font-weight: bold;'>🎯 Target: Selesai dalam 30 menit (07:00 - 07:30 WIB)</span>
         </small>
         </div>
         """, unsafe_allow_html=True)
